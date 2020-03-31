@@ -2,6 +2,13 @@
 
 For more information: https://docs.it-novum.com/display/ODE/Create+a+new+openITCOCKPIT+Module
 
+## Usage
+```
+cd /opt/openitc/frontend/plugins
+git clone https://github.com/it-novum/openITCOCKPIT-ExampleModule.git ExampleModule
+oitc rights
+```
+
 # License
 ```
 The MIT License
