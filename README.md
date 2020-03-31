@@ -1,6 +1,6 @@
 # ExampleModule plugin for openITCOCKPIT 4
 
-For more information: https://docs.it-novum.com/display/ODE/Create+a+new+openITCOCKPIT+Module
+For more information: https://docs.it-novum.com/display/ODE/Creating+a+new+openITCOCKPIT+Module
 
 ## Usage
 ```
