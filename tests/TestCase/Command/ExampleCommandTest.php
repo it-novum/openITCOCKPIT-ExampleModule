@@ -24,9 +24,26 @@
 
 declare(strict_types=1);
 
-namespace ExampleModule\Controller;
+namespace ExampleModule\Test\TestCase\Command;
 
-use App\Controller\AppController as BaseController;
+use Cake\TestSuite\ConsoleIntegrationTestTrait;
+use Cake\TestSuite\TestCase;
 
-class AppController extends BaseController {
+/**
+ * ExampleModule\Command\ExampleCommand Test Case
+ *
+ * @uses \ExampleModule\Command\ExampleCommand
+ */
+class ExampleCommandTest extends TestCase {
+    use ConsoleIntegrationTestTrait;
+
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    protected function setUp(): void {
+        parent::setUp();
+        $this->useCommandRunner();
+    }
 }

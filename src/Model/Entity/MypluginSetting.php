@@ -24,9 +24,31 @@
 
 declare(strict_types=1);
 
-namespace ExampleModule\Controller;
+namespace ExampleModule\Model\Entity;
 
-use App\Controller\AppController as BaseController;
+use Cake\ORM\Entity;
 
-class AppController extends BaseController {
+/**
+ * MypluginSetting Entity
+ *
+ * @property int $id
+ * @property string $webhook_url
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $modified
+ */
+class MypluginSetting extends Entity {
+    /**
+     * Fields that can be mass assigned using newEntity() or patchEntity().
+     *
+     * Note that when '*' is set to true, this allows all unspecified fields to
+     * be mass assigned. For security purposes, it is advised to set '*' to false
+     * (or remove it), and explicitly make individual fields accessible as needed.
+     *
+     * @var array<string, bool>
+     */
+    protected $_accessible = [
+        'webhook_url' => true,
+        'created'     => true,
+        'modified'    => true,
+    ];
 }
