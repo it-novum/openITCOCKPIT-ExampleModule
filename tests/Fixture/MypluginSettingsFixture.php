@@ -24,9 +24,28 @@
 
 declare(strict_types=1);
 
-namespace ExampleModule\Controller;
+namespace ExampleModule\Test\Fixture;
 
-use App\Controller\AppController as BaseController;
+use Cake\TestSuite\Fixture\TestFixture;
 
-class AppController extends BaseController {
+/**
+ * MypluginSettingsFixture
+ */
+class MypluginSettingsFixture extends TestFixture {
+    /**
+     * Init method
+     *
+     * @return void
+     */
+    public function init(): void {
+        $this->records = [
+            [
+                'id'          => 1,
+                'webhook_url' => 'Lorem ipsum dolor sit amet',
+                'created'     => '2025-05-08 06:31:03',
+                'modified'    => '2025-05-08 06:31:03',
+            ],
+        ];
+        parent::init();
+    }
 }

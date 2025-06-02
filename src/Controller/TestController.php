@@ -1,105 +1,57 @@
 <?php
+// Copyright (C) <2015-present>  <it-novum GmbH>
+//
+// This file is dual licensed
+//
+// 1.
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, version 3 of the License.
+//
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+//
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+// 2.
+//     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+//     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+//     License agreement and license key will be shipped with the order
+//     confirmation.
+
 declare(strict_types=1);
 
 namespace ExampleModule\Controller;
 
-
-use App\Model\Table\HostsTable;
-use Cake\ORM\Query;
-use Cake\ORM\TableRegistry;
-use Cake\Utility\Hash;
-use ExampleModule\Model\Table\ExampleNotesTable;
-use itnovum\openITCOCKPIT\Core\HoststatusFields;
+use ExampleModule\Model\Table\MypluginSettingsTable;
 
 class TestController extends AppController {
-
     public function index() {
-        if (!$this->isApiRequest()) {
-            // The requested URL was: /example_module/test/index.html
-            // The controller only sends the HTML template to the client browser / AngularJS
+        /** @var MypluginSettingsTable $myPluginSettingsTable */
+        $myPluginSettingsTable = $this->getTableLocator()->get('ExampleModule.MypluginSettings');
+        $settingsEntity = $myPluginSettingsTable->getSettingsEntity();
 
-            /**********************************************************/
-            /* DO NOT RUN ANY DATABASE QUERY HERE!                    */
-            /* THIS CODE IS ONLY TO SHIP THE TEMPLATE                 */
-            /**********************************************************/
+        if ($this->request->is('post')) {
+            $settingsEntity = $myPluginSettingsTable->patchEntity($settingsEntity, $this->request->getData(null, []));
 
-            // Pass the variable "message" with the content "Hello World (HTML)" to the view for .html requests
-            $this->set('message', 'Hello World (HTML)');
-            return;
+            $myPluginSettingsTable->save($settingsEntity);
+            if ($settingsEntity->hasErrors()) {
+                $this->response = $this->response->withStatus(400);
+                $this->set('error', $settingsEntity->getErrors());
+                $this->viewBuilder()->setOption('serialize', ['error']);
+                return;
+            }
+
+            $this->set('teamsSettings', $settingsEntity);
+            $this->viewBuilder()->setOption('serialize', [
+                'teamsSettings'
+            ]);
         }
 
-        // This get executed for API requests
-        //  The requested URL was: /example_module/test/index.json
-
-        //Load ExampleNotesTable
-        /** @var ExampleNotesTable $ExampleNotesTable */
-        $ExampleNotesTable = TableRegistry::getTableLocator()->get('ExampleModule.ExampleNotes');
-
-        // Load Hoststatus table
-        $HoststatusTable = $this->DbBackend->getHoststatusTable();
-
-        //Query data
-        $result = $ExampleNotesTable->find()
-            ->order([
-                'ExampleNotes.id' => 'asc'
-            ])
-            ->contain([
-                'Hosts' => function (Query $query) {
-                    $query
-                        ->disableAutoFields()
-                        ->select([
-                            'Hosts.id',
-                            'Hosts.name',
-                            'Hosts.uuid',
-                        ]);
-                    return $query;
-                }
-            ])
-            ->all();
-
-        // Select fields to load
-        $HoststatusFields = new HoststatusFields($this->DbBackend);
-        $HoststatusFields
-            ->currentState()
-            ->output();
-
-        //Query Hoststatus Table
-        $hoststatus = $HoststatusTable->byUuids(
-            Hash::extract($result->toArray(), '{n}.host.uuid'),
-            $HoststatusFields
-        );
-
-        //Query core Hosts Table to test Plugin associations
-        /** @var HostsTable $HostsTable */
-        $HostsTable = TableRegistry::getTableLocator()->get('Hosts');
-        $hosts = $HostsTable->find()
-            ->select([
-                'Hosts.id',
-                'Hosts.name',
-                'Hosts.uuid'
-            ])
-            ->contain([
-                'ExampleNote' => function(Query $query){
-                $query->select([
-                    'id',
-                    'host_id',
-                    'notes'
-                ]);
-                    return $query;
-                }
-                //'ExampleNote' //Singular => hasOne!
-            ])
-            ->all();
-
-        // Pass the variable "message" with the content "Hello World" to the JSON view
-        // Pass the variable "result" to the JSON view
-        $this->set('message', 'Hello World');
-        $this->set('result', $result);
-        $this->set('hoststatus', $hoststatus);
-        $this->set('hosts', $hosts);
-
-        // Add the variable "message" to .json output
-        $this->viewBuilder()->setOption('serialize', ['message', 'result', 'hoststatus', 'hosts']);
+        $this->set('settings', $settingsEntity);
+        $this->viewBuilder()->setOption('serialize', ['settings']);
     }
-
 }

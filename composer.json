@@ -1,6 +1,6 @@
 {
     "name": "open-itcockpit/ExampleModule",
-    "description": "ExampleModule plugin for openITCOCKPIT",
+    "description": "ExampleModule plugin for openITCOCKPIT 5",
     "type": "cakephp-plugin",
     "license": "MIT",
     "require": {

@@ -24,9 +24,32 @@
 
 declare(strict_types=1);
 
-namespace ExampleModule\Controller;
+use Migrations\AbstractMigration;
 
-use App\Controller\AppController as BaseController;
+class Initial extends AbstractMigration {
 
-class AppController extends BaseController {
+    /**
+     * Change Method.
+     *
+     * More information on this method is available here:
+     * https://book.cakephp.org/phinx/0/en/migrations.html#the-change-method
+     * @return void
+     */
+    public function change(): void {
+        $table = $this->table('myplugin_settings');
+        $table->addColumn('webhook_url', 'string', [
+            'default' => '',
+            'limit'   => 255,
+            'null'    => false,
+        ]);
+        $table->addColumn('created', 'datetime', [
+            'default' => null,
+            'null'    => false,
+        ]);
+        $table->addColumn('modified', 'datetime', [
+            'default' => null,
+            'null'    => false,
+        ]);
+        $table->create();
+    }
 }

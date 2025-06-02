@@ -1,6 +1,12 @@
-# ExampleModule plugin for openITCOCKPIT 4
+# ExampleModule plugin (back-end) for openITCOCKPIT 5
 
-For more information: https://docs.it-novum.com/display/ODE/Creating+a+new+openITCOCKPIT+Module
+This is the back-end part of the ExampleModule plugin for openITCOCKPIT 5. It is a simple example of how to create a custom module for openITCOCKPIT.
+
+You can find the front-end part of this Example here: 
+
+
+For more information and a hands-on manual, refer to our [Creating a new Module section](https://docs.it-novum.com/display/ODE/Creating+a+new+openITCOCKPIT+Module) of the openITCOCKPIT documentation.
+
 
 ## Usage
 ```
